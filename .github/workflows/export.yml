@@ -75,14 +75,14 @@ jobs:
           # PDF（WeasyPrint 渲染：CSS 控制中文断行/两端对齐/代码换行，
           # 不依赖 TeX 的 CJK 支持，杜绝右侧截断）
           cat > /tmp/pdf.css <<'CSS'
-@page { size: A4; margin: 2.2cm; }
-body { font-family: "Noto Sans CJK SC", "Noto Sans CJK", sans-serif; font-size: 11pt; line-height: 1.75; text-align: justify; }
-h1 { font-size: 20pt; }
-h2 { font-size: 16pt; }
-h3 { font-size: 13pt; }
-pre { white-space: pre-wrap; overflow-wrap: break-word; font-family: "Noto Sans Mono CJK SC", "Noto Sans CJK SC", monospace; font-size: 9pt; }
-code { font-family: "Noto Sans Mono CJK SC", "Noto Sans CJK SC", monospace; }
-CSS
+          @page { size: A4; margin: 2.2cm; }
+          body { font-family: "Noto Sans CJK SC", "Noto Sans CJK", sans-serif; font-size: 11pt; line-height: 1.75; text-align: justify; }
+          h1 { font-size: 20pt; }
+          h2 { font-size: 16pt; }
+          h3 { font-size: 13pt; }
+          pre { white-space: pre-wrap; overflow-wrap: break-word; font-family: "Noto Sans Mono CJK SC", "Noto Sans CJK SC", monospace; font-size: 9pt; }
+          code { font-family: "Noto Sans Mono CJK SC", "Noto Sans CJK SC", monospace; }
+          CSS
 
           pandoc $FILES \
             --pdf-engine=weasyprint \
