@@ -1,4 +1,10 @@
-name: 导出《鱿鱼之泪》(HTML/DOCX/EPUB/PDF)
+name: 导出《鱿鱼之泪》(Release + Pages)
+
+# 导出产物不再提交回仓库：
+#   - HTML 部署到 GitHub Pages（在线阅读，需在 Settings → Pages 把 Source 设为 GitHub Actions）
+#   - PDF / EPUB / DOCX / HTML 上传到滚动 release「latest」
+# 下载链接（永远指向最新草稿）：
+#   https://github.com/lightconsen/squidtears/releases/latest/download/squid-tears.pdf 等
 
 on:
   workflow_dispatch:
@@ -9,9 +15,18 @@ on:
       - 'story.md'
       - '.github/workflows/export.yml'
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
   export:
-    name: 生成四种格式并提交回仓库
+    name: 生成四种格式
     runs-on: ubuntu-latest
     container: pandoc/latex:latest
     steps:
@@ -46,7 +61,7 @@ jobs:
           echo "待导出章节："
           for f in $FILES; do echo "  $f"; done
 
-          mkdir -p 04_exports
+          mkdir -p _exports
 
           # HTML（自包含单文件 + 目录，用于在线阅读）
           pandoc $FILES \
@@ -55,14 +70,14 @@ jobs:
             --metadata title="鱿鱼之泪" \
             --metadata author="john2ai" \
             --metadata lang=zh-CN \
-            -o 04_exports/squid-tears.html
+            -o _exports/squid-tears.html
 
           # DOCX
           pandoc $FILES \
             --metadata title="鱿鱼之泪" \
             --metadata author="john2ai" \
             --metadata lang=zh-CN \
-            -o 04_exports/squid-tears.docx
+            -o _exports/squid-tears.docx
 
           # EPUB
           pandoc $FILES \
@@ -70,7 +85,7 @@ jobs:
             --metadata title="鱿鱼之泪" \
             --metadata author="john2ai" \
             --metadata lang=zh-CN \
-            -o 04_exports/squid-tears.epub
+            -o _exports/squid-tears.epub
 
           # PDF（WeasyPrint 渲染：CSS 控制中文断行/两端对齐/代码换行，
           # 不依赖 TeX 的 CJK 支持，杜绝右侧截断）
@@ -91,44 +106,70 @@ jobs:
             --metadata title="鱿鱼之泪" \
             --metadata author="john2ai" \
             --metadata lang=zh-CN \
-            -o 04_exports/squid-tears.pdf
-          echo "PDF 大小：$(wc -c < 04_exports/squid-tears.pdf) bytes"
+            -o _exports/squid-tears.pdf
+          echo "PDF 大小：$(wc -c < _exports/squid-tears.pdf) bytes"
 
-      - name: 提交导出文件回仓库
-        # 不依赖 checkout 生成的 .git（容器内 apk git 与 runner git 存在兼容问题），
-        # 用 GITHUB_TOKEN 临时浅克隆提交回仓库
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -e
-          echo "== 诊断（工作区 git 状态）=="
-          pwd
-          git rev-parse --git-dir 2>&1 || echo "NO_GIT_DIR"
-          ls -ld "$GITHUB_WORKSPACE/04_exports" 2>&1 || echo "NO_EXPORTS_DIR"
+          # Pages 在线阅读用：根路径直接 serve index.html
+          mkdir -p _pages
+          cp _exports/squid-tears.html _pages/index.html
 
-          rm -rf /tmp/exports-repo
-          git clone --depth 1 \
-            "https://x-access-token:${GITHUB_TOKEN}@github.com/lightconsen/squidtears.git" \
-            /tmp/exports-repo
-          cd /tmp/exports-repo
-          mkdir -p 04_exports
-          cp -r "$GITHUB_WORKSPACE/04_exports/." 04_exports/
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add 04_exports
-          if git diff --cached --quiet; then
-            echo "导出文件无变化，跳过提交"
-          else
-            git commit -m "build: 更新导出成品（HTML/DOCX/EPUB/PDF）"
-            git push origin main
-          fi
-
-      - name: 上传产物（artifact 备份）
+      - name: 上传四种格式（供 Release 使用）
         uses: actions/upload-artifact@v5
         with:
           name: squid-tears-exports
-          path: |
-            04_exports/*.html
-            04_exports/*.docx
-            04_exports/*.epub
-            04_exports/*.pdf
+          path: _exports/
+
+      - name: 上传 HTML（供 Pages 部署）
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _pages/
+
+  release:
+    name: 更新滚动 Release（latest）
+    needs: export
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: 下载导出文件
+        uses: actions/download-artifact@v5
+        with:
+          name: squid-tears-exports
+          path: _exports/
+
+      - name: 重建 latest release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          TAG="latest"
+          SHA="$(git rev-parse --short HEAD)"
+          DATE="$(date +%Y-%m-%d)"
+
+          # 每次 push 重建同一个 latest，避免 release 泛滥
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release delete "$TAG" --yes --cleanup-tag
+          fi
+
+          NOTES=$(printf '自动构建于 %s（commit %s）。\n\n在线阅读（HTML）：https://lightconsen.github.io/squidtears/\nPDF / EPUB / DOCX 见本 release 附件。' "$DATE" "$SHA")
+
+          gh release create "$TAG" \
+            --target "$SHA" \
+            --title "鱿鱼之泪 · 最新草稿" \
+            --notes "$NOTES" \
+            _exports/squid-tears.html \
+            _exports/squid-tears.docx \
+            _exports/squid-tears.epub \
+            _exports/squid-tears.pdf
+
+  deploy:
+    name: 部署 GitHub Pages
+    needs: export
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 部署到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

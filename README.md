@@ -15,12 +15,12 @@
 
 | 格式 | 链接 | 说明 |
 | --- | --- | --- |
-| 在线阅读（HTML） | [squid-tears.html](https://htmlpreview.github.io/?https://raw.githubusercontent.com/lightconsen/squidtears/main/04_exports/squid-tears.html) | 浏览器直接阅读，含目录 |
-| PDF | [squid-tears.pdf](https://raw.githubusercontent.com/lightconsen/squidtears/main/04_exports/squid-tears.pdf) | 打印 / 桌面阅读 |
-| EPUB | [squid-tears.epub](https://raw.githubusercontent.com/lightconsen/squidtears/main/04_exports/squid-tears.epub) | 手机 / 电子阅读器 |
-| DOCX | [squid-tears.docx](https://raw.githubusercontent.com/lightconsen/squidtears/main/04_exports/squid-tears.docx) | Word 编辑版 |
+| 在线阅读（HTML） | [lightconsen.github.io/squidtears](https://lightconsen.github.io/squidtears/) | GitHub Pages，浏览器直接阅读，含目录 |
+| PDF | [squid-tears.pdf](https://github.com/lightconsen/squidtears/releases/latest/download/squid-tears.pdf) | 打印 / 桌面阅读 |
+| EPUB | [squid-tears.epub](https://github.com/lightconsen/squidtears/releases/latest/download/squid-tears.epub) | 手机 / 电子阅读器 |
+| DOCX | [squid-tears.docx](https://github.com/lightconsen/squidtears/releases/latest/download/squid-tears.docx) | Word 编辑版 |
 
-> 文件由 GitHub Actions 自动生成并提交回仓库，首次运行后生效。构建与导出细节见 [build.md](build.md)。
+> 导出文件由 GitHub Actions 自动生成：HTML 部署到 GitHub Pages，PDF/EPUB/DOCX 发布到 GitHub Release「latest」，每次 push 自动更新。首次运行需在仓库 Settings → Pages 将 Source 设为 GitHub Actions。构建与导出细节见 [build.md](build.md)。
 
 ## 核心设定
 

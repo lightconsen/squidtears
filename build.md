@@ -8,58 +8,64 @@
 - `01_drafts/` — 正文草稿，按部分建目录（当前 16 章草稿在 `part1_seed/`）
 - `02_tracking/` — 写作台账：章节进度 / 时间线校验 / 角色弧光追踪 / 伏笔回收状态
 - `03_review/` — 审核记录（三维度审核 + 打磨记录）
-- `04_exports/` — 导出成品（HTML / DOCX / EPUB / PDF），由 GitHub Actions 自动生成并提交回仓库
 - `assets/` — 封面等资源（`cover.jpg`）
-- `.github/workflows/export.yml` — 自动导出 workflow
+- `.github/workflows/export.yml` — 自动导出 workflow（Release + Pages）
 - `CLAUDE.md` — 项目写作约定（给协作 AI 的记忆）
 - `LICENSE` — 版权许可（中文为权威版本）
+
+> 导出产物不再提交回仓库：`04_exports/`、`_exports/`、`_pages/` 均已加入 `.gitignore`。
 
 ## 导出构建
 
 ### 方式一：GitHub Actions（推荐，无需本地安装）
 
-push 到 `main`（且改动涉及 `01_drafts/`、`story.md` 或 workflow 本身）后，workflow **「导出《鱿鱼之泪》」** 会自动：
+push 到 `main`（且改动涉及 `01_drafts/`、`story.md` 或 workflow 本身）后，workflow **「导出《鱿鱼之泪》(Release + Pages)」** 会自动：
 
 1. 用 `pandoc/latex` 官方镜像生成 **HTML / DOCX / EPUB / PDF** 四种格式；
-2. **提交回 `04_exports/` 目录**——README 里的下载链接因此始终有效；
-3. 同时上传 artifact `squid-tears-exports` 作为备份。
+2. **HTML 部署到 GitHub Pages**——在线阅读地址 `https://lightconsen.github.io/squidtears/`；
+3. **四份文件上传到滚动 release「latest」**——PDF / EPUB / DOCX 下载链接始终指向最新草稿（每次 push 重建同一个 latest，不累积历史版本）。
 
 也可在 Actions 页面手动触发（Run workflow）。
 
+**首次运行前**：需在仓库 Settings → Pages 把 Source 设为 **GitHub Actions**（否则 Pages 部署步骤会失败；release 不受影响）。
+
 - 产物：`squid-tears.html` / `squid-tears.docx` / `squid-tears.epub` / `squid-tears.pdf`
+- 下载链接（永远指向最新）：`https://github.com/lightconsen/squidtears/releases/latest/download/<文件>`
 - PDF 用 **WeasyPrint** 渲染（`--pdf-engine=weasyprint`）：Pango 原生中文断行 + `pre-wrap` 代码换行，杜绝 CJK 右侧截断；CSS 控制版式（A4、边距 2.2cm、正文 11pt / 行距 1.75 / 两端对齐）
-- HTML 为自包含单文件（CSS 内嵌、带目录），可直接在浏览器打开
+- HTML 为自包含单文件（CSS 内嵌、带目录），Pages 部署时复制为 `index.html` 直接 serve
 
-### 方式二：本地 Pandoc
+### 方式二：本地 Pandoc（仅预览，正式发布走 Release + Pages）
 
-需安装 [Pandoc](https://pandoc.org/) 与 [WeasyPrint](https://weasyprint.org/)（PDF 用 WeasyPrint 渲染，自带中文字体断行；macOS 可 `brew install pandoc weasyprint`）：
+需安装 [Pandoc](https://pandoc.org/) 与 [WeasyPrint](https://weasyprint.org/)（PDF 用 WeasyPrint 渲染，自带中文字体断行；macOS 可 `brew install pandoc weasyprint`）。输出到 `/tmp`，不进仓库：
 
 ```bash
-# HTML（在线阅读）
-pandoc 01_drafts/part1_seed/*.md -o 04_exports/squid-tears.html \
+FILES=$(ls 01_drafts/part1_seed/*.md | sort -V)
+
+# HTML（预览）
+pandoc $FILES -o /tmp/squid-tears.html \
   -s --embed-resources --toc \
   --metadata title="鱿鱼之泪" --metadata author="john2ai" --metadata lang=zh-CN
 
 # DOCX
-pandoc 01_drafts/part1_seed/*.md -o 04_exports/squid-tears.docx \
+pandoc $FILES -o /tmp/squid-tears.docx \
   --metadata title="鱿鱼之泪" --metadata author="john2ai" --metadata lang=zh-CN
 
 # EPUB
-pandoc 01_drafts/part1_seed/*.md -o 04_exports/squid-tears.epub \
+pandoc $FILES -o /tmp/squid-tears.epub \
   --toc --metadata title="鱿鱼之泪" --metadata author="john2ai" --metadata lang=zh-CN
 
 # PDF（WeasyPrint：CSS 控制版式，与 CI 一致）
 cat > /tmp/pdf.css <<'CSS'
 @page { size: A4; margin: 2.2cm; }
-body { font-family: "Noto Sans CJK SC", "Noto Sans CJK", sans-serif; font-size: 11pt; line-height: 1.75; text-align: justify; }
-pre { white-space: pre-wrap; overflow-wrap: break-word; font-family: "Noto Sans Mono CJK SC", "Noto Sans CJK SC", monospace; font-size: 9pt; }
+body { font-family: "Noto Sans CJK SC", "PingFang SC", "Heiti SC", sans-serif; font-size: 11pt; line-height: 1.75; text-align: justify; }
+pre { white-space: pre-wrap; overflow-wrap: break-word; font-family: "Noto Sans Mono CJK SC", "PingFang SC", monospace; font-size: 9pt; }
 CSS
-pandoc 01_drafts/part1_seed/*.md -o 04_exports/squid-tears.pdf \
+pandoc $FILES -o /tmp/squid-tears.pdf \
   --pdf-engine=weasyprint --toc --css=/tmp/pdf.css \
   --metadata title="鱿鱼之泪" --metadata author="john2ai" --metadata lang=zh-CN
 ```
 
-注意：glob 展开需按章节数字顺序（01 → 16）；`10_`、`11_` 等会排在 `09_` 之前，请用 `sort -V` 排序或显式列出文件。
+注意：必须用 `sort -V` 让章节按数字顺序排列（01 → 16），否则 `10_`、`11_` 会排在 `09_` 之前。macOS 本地 PDF 需在字体栈补 `PingFang SC` / `Heiti SC`（见上），否则中文会乱码。
 
 ## 创作方式
 

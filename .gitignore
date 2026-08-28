@@ -1,0 +1,6 @@
+# 导出产物由 GitHub Actions 生成，不再提交回仓库：
+#   PDF/EPUB/DOCX/HTML → 滚动 release「latest」
+#   HTML → GitHub Pages
+04_exports/
+_exports/
+_pages/
