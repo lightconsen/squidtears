@@ -16,7 +16,7 @@ jobs:
     container: pandoc/latex:latest-debian
     steps:
       - name: 检出仓库
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 安装依赖与中文字体（PDF 排版用）
         run: |
@@ -25,16 +25,20 @@ jobs:
 
       - name: 导出四种格式
         run: |
-          set -euo pipefail
+          set -e
           # 章节文件按数字顺序排列（01 → 16），避免 10_ 排在 09_ 前
-          mapfile -t FILES < <(ls 01_drafts/part1_seed/*.md | sort -V)
-          echo "待导出章节（${#FILES[@]} 个）："
-          printf '  %s\n' "${FILES[@]}"
+          # 容器默认 shell 为 sh（无 bash/mapfile/pipefail），用纯 POSIX 写法
+          FILES=""
+          for f in $(ls 01_drafts/part1_seed/*.md | sort -V); do
+            FILES="$FILES $f"
+          done
+          echo "待导出章节："
+          for f in $FILES; do echo "  $f"; done
 
           mkdir -p 04_exports
 
           # HTML（自包含单文件 + 目录，用于在线阅读）
-          pandoc "${FILES[@]}" \
+          pandoc $FILES \
             -s --embed-resources \
             --toc \
             --metadata title="鱿鱼之泪" \
@@ -43,14 +47,14 @@ jobs:
             -o 04_exports/squid-tears.html
 
           # DOCX
-          pandoc "${FILES[@]}" \
+          pandoc $FILES \
             --metadata title="鱿鱼之泪" \
             --metadata author="john2ai" \
             --metadata lang=zh-CN \
             -o 04_exports/squid-tears.docx
 
           # EPUB
-          pandoc "${FILES[@]}" \
+          pandoc $FILES \
             --toc \
             --metadata title="鱿鱼之泪" \
             --metadata author="john2ai" \
@@ -58,7 +62,7 @@ jobs:
             -o 04_exports/squid-tears.epub
 
           # PDF（xelatex + 中文字体）
-          pandoc "${FILES[@]}" \
+          pandoc $FILES \
             --pdf-engine=xelatex \
             --toc \
             -V geometry:margin=2.5cm \
@@ -70,7 +74,7 @@ jobs:
 
       - name: 提交导出文件回仓库
         run: |
-          set -euo pipefail
+          set -e
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add 04_exports
