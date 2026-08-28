@@ -31,6 +31,12 @@ jobs:
             echo "未识别的包管理器" >&2
             exit 1
           fi
+          # 兜底：用 tlmgr 装 xeCJK（部分镜像缺它；装不上则 PDF 退回 mainfont 渲染中文）
+          if command -v tlmgr >/dev/null 2>&1; then
+            tlmgr install xeCJK 2>&1 | tail -3 || true
+          fi
+          echo "== xeCJK 诊断 =="
+          kpsewhich xeCJK.sty || echo "xeCJK.sty: 不存在（PDF 将用 mainfont 渲染中文）"
 
       - name: 导出四种格式
         run: |
@@ -70,16 +76,27 @@ jobs:
             --metadata lang=zh-CN \
             -o 04_exports/squid-tears.epub
 
-          # PDF（xelatex + 中文字体）
-          pandoc $FILES \
-            --pdf-engine=xelatex \
-            --toc \
-            -V geometry:margin=2.5cm \
-            -V mainfont="Noto Sans CJK SC" \
-            -V CJKmainfont="Noto Sans CJK SC" \
-            --metadata title="鱿鱼之泪" \
-            --metadata author="john2ai" \
-            -o 04_exports/squid-tears.pdf
+          # PDF（xelatex + 中文字体；xeCJK 存在时启用 CJKmainfont，否则退回 mainfont 渲染中文）
+          if [ -n "$(kpsewhich xeCJK.sty 2>/dev/null)" ]; then
+            pandoc $FILES \
+              --pdf-engine=xelatex \
+              --toc \
+              -V geometry:margin=2.5cm \
+              -V mainfont="Noto Sans CJK SC" \
+              -V CJKmainfont="Noto Sans CJK SC" \
+              --metadata title="鱿鱼之泪" \
+              --metadata author="john2ai" \
+              -o 04_exports/squid-tears.pdf
+          else
+            pandoc $FILES \
+              --pdf-engine=xelatex \
+              --toc \
+              -V geometry:margin=2.5cm \
+              -V mainfont="Noto Sans CJK SC" \
+              --metadata title="鱿鱼之泪" \
+              --metadata author="john2ai" \
+              -o 04_exports/squid-tears.pdf
+          fi
 
       - name: 提交导出文件回仓库
         run: |
