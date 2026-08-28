@@ -1,0 +1,67 @@
+name: 导出《鱿鱼之泪》(DOCX/EPUB/PDF)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '01_drafts/**'
+      - 'story.md'
+      - '.github/workflows/export.yml'
+
+jobs:
+  export:
+    name: 生成 DOCX / EPUB / PDF
+    runs-on: ubuntu-latest
+    container: pandoc/latex:latest
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 安装中文字体（PDF 排版用）
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq fonts-noto-cjk
+
+      - name: 导出三种格式
+        run: |
+          set -euo pipefail
+          # 章节文件按数字顺序排列（01 → 16），避免 10_ 排在 09_ 前
+          mapfile -t FILES < <(ls 01_drafts/part1_seed/*.md | sort -V)
+          echo "待导出章节（${#FILES[@]} 个）："
+          printf '  %s\n' "${FILES[@]}"
+
+          # DOCX
+          pandoc "${FILES[@]}" \
+            -o squid-tears.docx \
+            --metadata title="鱿鱼之泪" \
+            --metadata author="john2ai" \
+            --metadata lang=zh-CN
+
+          # EPUB
+          pandoc "${FILES[@]}" \
+            -o squid-tears.epub \
+            --toc \
+            --metadata title="鱿鱼之泪" \
+            --metadata author="john2ai" \
+            --metadata lang=zh-CN
+
+          # PDF（xelatex + 中文字体）
+          pandoc "${FILES[@]}" \
+            -o squid-tears.pdf \
+            --pdf-engine=xelatex \
+            --toc \
+            -V geometry:margin=2.5cm \
+            -V mainfont="Noto Sans CJK SC" \
+            -V CJKmainfont="Noto Sans CJK SC" \
+            --metadata title="鱿鱼之泪" \
+            --metadata author="john2ai"
+
+      - name: 上传产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: squid-tears-exports
+          path: |
+            squid-tears.docx
+            squid-tears.epub
+            squid-tears.pdf
