@@ -27,12 +27,12 @@ push 到 `main`（且改动涉及 `01_drafts/`、`story.md` 或 workflow 本身�
 也可在 Actions 页面手动触发（Run workflow）。
 
 - 产物：`squid-tears.html` / `squid-tears.docx` / `squid-tears.epub` / `squid-tears.pdf`
-- PDF 用 xelatex + Noto Sans CJK 中文字体排版（边距 2.5cm、带目录）
+- PDF 用 **WeasyPrint** 渲染（`--pdf-engine=weasyprint`）：Pango 原生中文断行 + `pre-wrap` 代码换行，杜绝 CJK 右侧截断；CSS 控制版式（A4、边距 2.2cm、正文 11pt / 行距 1.75 / 两端对齐）
 - HTML 为自包含单文件（CSS 内嵌、带目录），可直接在浏览器打开
 
 ### 方式二：本地 Pandoc
 
-需安装 [Pandoc](https://pandoc.org/)（PDF 另需 LaTeX 引擎与中文字体，macOS 可 `brew install pandoc`）：
+需安装 [Pandoc](https://pandoc.org/) 与 [WeasyPrint](https://weasyprint.org/)（PDF 用 WeasyPrint 渲染，自带中文字体断行；macOS 可 `brew install pandoc weasyprint`）：
 
 ```bash
 # HTML（在线阅读）
@@ -48,11 +48,15 @@ pandoc 01_drafts/part1_seed/*.md -o 04_exports/squid-tears.docx \
 pandoc 01_drafts/part1_seed/*.md -o 04_exports/squid-tears.epub \
   --toc --metadata title="鱿鱼之泪" --metadata author="john2ai" --metadata lang=zh-CN
 
-# PDF
+# PDF（WeasyPrint：CSS 控制版式，与 CI 一致）
+cat > /tmp/pdf.css <<'CSS'
+@page { size: A4; margin: 2.2cm; }
+body { font-family: "Noto Sans CJK SC", "Noto Sans CJK", sans-serif; font-size: 11pt; line-height: 1.75; text-align: justify; }
+pre { white-space: pre-wrap; overflow-wrap: break-word; font-family: "Noto Sans Mono CJK SC", "Noto Sans CJK SC", monospace; font-size: 9pt; }
+CSS
 pandoc 01_drafts/part1_seed/*.md -o 04_exports/squid-tears.pdf \
-  --pdf-engine=xelatex --toc -V geometry:margin=2.5cm \
-  -V mainfont="Noto Sans CJK SC" -V CJKmainfont="Noto Sans CJK SC" \
-  --metadata title="鱿鱼之泪" --metadata author="john2ai"
+  --pdf-engine=weasyprint --toc --css=/tmp/pdf.css \
+  --metadata title="鱿鱼之泪" --metadata author="john2ai" --metadata lang=zh-CN
 ```
 
 注意：glob 展开需按章节数字顺序（01 → 16）；`10_`、`11_` 等会排在 `09_` 之前，请用 `sort -V` 排序或显式列出文件。
