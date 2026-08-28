@@ -99,8 +99,24 @@ jobs:
           fi
 
       - name: 提交导出文件回仓库
+        # 不依赖 checkout 生成的 .git（容器内 apk git 与 runner git 存在兼容问题），
+        # 用 GITHUB_TOKEN 临时浅克隆提交回仓库
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
+          echo "== 诊断（工作区 git 状态）=="
+          pwd
+          git rev-parse --git-dir 2>&1 || echo "NO_GIT_DIR"
+          ls -ld "$GITHUB_WORKSPACE/04_exports" 2>&1 || echo "NO_EXPORTS_DIR"
+
+          rm -rf /tmp/exports-repo
+          git clone --depth 1 \
+            "https://x-access-token:${GITHUB_TOKEN}@github.com/lightconsen/squidtears.git" \
+            /tmp/exports-repo
+          cd /tmp/exports-repo
+          mkdir -p 04_exports
+          cp -r "$GITHUB_WORKSPACE/04_exports/." 04_exports/
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add 04_exports
@@ -108,7 +124,7 @@ jobs:
             echo "导出文件无变化，跳过提交"
           else
             git commit -m "build: 更新导出成品（HTML/DOCX/EPUB/PDF）"
-            git push
+            git push origin main
           fi
 
       - name: 上传产物（artifact 备份）
