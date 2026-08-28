@@ -1,4 +1,4 @@
-name: 导出《鱿鱼之泪》(DOCX/EPUB/PDF)
+name: 导出《鱿鱼之泪》(HTML/DOCX/EPUB/PDF)
 
 on:
   workflow_dispatch:
@@ -11,19 +11,19 @@ on:
 
 jobs:
   export:
-    name: 生成 DOCX / EPUB / PDF
+    name: 生成四种格式并提交回仓库
     runs-on: ubuntu-latest
     container: pandoc/latex:latest
     steps:
       - name: 检出仓库
         uses: actions/checkout@v4
 
-      - name: 安装中文字体（PDF 排版用）
+      - name: 安装依赖与中文字体（PDF 排版用）
         run: |
           apt-get update -qq
-          apt-get install -y -qq fonts-noto-cjk
+          apt-get install -y -qq fonts-noto-cjk git
 
-      - name: 导出三种格式
+      - name: 导出四种格式
         run: |
           set -euo pipefail
           # 章节文件按数字顺序排列（01 → 16），避免 10_ 排在 09_ 前
@@ -31,37 +31,62 @@ jobs:
           echo "待导出章节（${#FILES[@]} 个）："
           printf '  %s\n' "${FILES[@]}"
 
-          # DOCX
-          pandoc "${FILES[@]}" \
-            -o squid-tears.docx \
-            --metadata title="鱿鱼之泪" \
-            --metadata author="john2ai" \
-            --metadata lang=zh-CN
+          mkdir -p 04_exports
 
-          # EPUB
+          # HTML（自包含单文件 + 目录，用于在线阅读）
           pandoc "${FILES[@]}" \
-            -o squid-tears.epub \
+            -s --embed-resources \
             --toc \
             --metadata title="鱿鱼之泪" \
             --metadata author="john2ai" \
-            --metadata lang=zh-CN
+            --metadata lang=zh-CN \
+            -o 04_exports/squid-tears.html
+
+          # DOCX
+          pandoc "${FILES[@]}" \
+            --metadata title="鱿鱼之泪" \
+            --metadata author="john2ai" \
+            --metadata lang=zh-CN \
+            -o 04_exports/squid-tears.docx
+
+          # EPUB
+          pandoc "${FILES[@]}" \
+            --toc \
+            --metadata title="鱿鱼之泪" \
+            --metadata author="john2ai" \
+            --metadata lang=zh-CN \
+            -o 04_exports/squid-tears.epub
 
           # PDF（xelatex + 中文字体）
           pandoc "${FILES[@]}" \
-            -o squid-tears.pdf \
             --pdf-engine=xelatex \
             --toc \
             -V geometry:margin=2.5cm \
             -V mainfont="Noto Sans CJK SC" \
             -V CJKmainfont="Noto Sans CJK SC" \
             --metadata title="鱿鱼之泪" \
-            --metadata author="john2ai"
+            --metadata author="john2ai" \
+            -o 04_exports/squid-tears.pdf
 
-      - name: 上传产物
+      - name: 提交导出文件回仓库
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add 04_exports
+          if git diff --cached --quiet; then
+            echo "导出文件无变化，跳过提交"
+          else
+            git commit -m "build: 更新导出成品（HTML/DOCX/EPUB/PDF）"
+            git push
+          fi
+
+      - name: 上传产物（artifact 备份）
         uses: actions/upload-artifact@v4
         with:
           name: squid-tears-exports
           path: |
-            squid-tears.docx
-            squid-tears.epub
-            squid-tears.pdf
+            04_exports/*.html
+            04_exports/*.docx
+            04_exports/*.epub
+            04_exports/*.pdf
