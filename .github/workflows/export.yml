@@ -21,7 +21,8 @@ jobs:
       - name: 安装依赖与中文字体（PDF 排版用）
         run: |
           apt-get update -qq
-          apt-get install -y -qq fonts-noto-cjk git
+          apt-get install -y -qq \
+            fonts-noto-cjk git texlive-lang-chinese
 
       - name: 导出四种格式
         run: |
