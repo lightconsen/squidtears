@@ -156,7 +156,7 @@ jobs:
 
           gh release create "$TAG" \
             --target "$SHA_FULL" \
-            --title "鱿鱼之泪 · 最新草稿" \
+            --title "鱿鱼之泪" \
             --notes "$NOTES" \
             _exports/squid-tears.html \
             _exports/squid-tears.docx \
