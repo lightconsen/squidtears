@@ -144,6 +144,7 @@ jobs:
           set -e
           TAG="latest"
           SHA="$(git rev-parse --short HEAD)"
+          SHA_FULL="$(git rev-parse HEAD)"
           DATE="$(date +%Y-%m-%d)"
 
           # 每次 push 重建同一个 latest，避免 release 泛滥
@@ -154,7 +155,7 @@ jobs:
           NOTES=$(printf '自动构建于 %s（commit %s）。\n\n在线阅读（HTML）：https://lightconsen.github.io/squidtears/\nPDF / EPUB / DOCX 见本 release 附件。' "$DATE" "$SHA")
 
           gh release create "$TAG" \
-            --target "$SHA" \
+            --target "$SHA_FULL" \
             --title "鱿鱼之泪 · 最新草稿" \
             --notes "$NOTES" \
             _exports/squid-tears.html \
