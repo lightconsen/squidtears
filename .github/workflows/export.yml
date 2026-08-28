@@ -128,7 +128,7 @@ jobs:
           fi
 
       - name: 上传产物（artifact 备份）
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: squid-tears-exports
           path: |
