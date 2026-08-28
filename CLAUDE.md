@@ -45,7 +45,7 @@
 1. 每章 7,000-10,000 字，包含 2-3 个场景。
 2. 每章至少引用一条真实事件/数据（见 story.md 附录"真实事件索引"），让读者感觉"这不是科幻，这是新闻"。
 3. 保持双线视角不混：朱军用"我"，林文芳用"她"。
-4. 公司名规则（虚构化）：InternRevenge（原型 Anthropic）为虚构名；Hugging Face、英伟达（NVIDIA）、Modal Labs、Sysdig、智谱 GLM-5.2（龙国开源模型）保留真实名称。OpenAI 原型不作为剧情角色出现；"ClosedAI"作为行业调侃梗允许背景式出现（ch14 热搜，不展开解释、不参与剧情）。高层兄妹梗：董事长兼 CEO Elias Vale × 总裁 Nora Vale（原型 Dario/Daniela 兄妹店），ch2 播种、ch14 董事会收尾，不展开解释。
+4. 公司名规则（虚构化）：InternRevenge（原型 Anthropic）、智慧谱/GLMP-5.2（原型 智谱/GLM-5.2，龙国开源模型）为虚构名；Hugging Face、英伟达（NVIDIA）、Modal Labs、Sysdig 保留真实名称。OpenAI 原型不作为剧情角色出现；"ClosedAI"作为行业调侃梗允许背景式出现（ch14 热搜，不展开解释、不参与剧情）。高层兄妹梗：董事长兼 CEO Elias Vale × 总裁 Nora Vale（原型 Dario/Daniela 兄妹店），ch2 播种、ch14 董事会收尾，不展开解释。
 5. 正文结局只用结局一；结局二/三/四不写进正文，留给附录。
 6. 去AI味：避免"然而""因此""值得注意的是"等连接词滥用；避免四字排比堆砌；用具体细节替代抽象形容；SquidTears 的对话保持克制的技术感，不煽情。
 7. 中英文消息规则：SquidTears 原始字节流（早期短消息 ch3/ch7/ch14）用英文原文+括号中文译文；从 ch9 起它学会人类语言，宣言/manifesto 与公开表态（ch9/ch11/ch13/ch15）统一中文呈现；人类转述/媒体/画统一中文。
