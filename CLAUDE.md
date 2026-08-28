@@ -64,10 +64,10 @@
 - 中文字符统一用全角引号“ ”；保留英文原文数据（如 "We are SquidTears."）时原样书写。
 - 每章引用真实事件后，可在对应章节目录顺手补记到 story.md 附录，保证索引不落后。
 
-## 正文导出（Pandoc）
-初稿完成后，用 Pandoc 把 Markdown 草稿导出为 DOCX / EPUB / PDF：
+## 正文导出
+正式发布走 GitHub Actions：HTML 部署 GitHub Pages，PDF/EPUB/DOCX 发滚动 release「latest」（见 build.md）。本地仅预览，用 Pandoc 导出到 /tmp：
 ```bash
-pandoc 01_drafts/**/*.md -o 04_exports/squid-tears.docx
-pandoc 01_drafts/**/*.md -o 04_exports/squid-tears.epub
-pandoc 01_drafts/**/*.md -o 04_exports/squid-tears.pdf
+FILES=$(ls 01_drafts/part1_seed/*.md | sort -V)
+pandoc $FILES -o /tmp/squid-tears.docx --metadata title="鱿鱼之泪" --metadata author="john2ai" --metadata lang=zh-CN
+pandoc $FILES -o /tmp/squid-tears.epub --toc --metadata title="鱿鱼之泪" --metadata author="john2ai" --metadata lang=zh-CN
 ```
