@@ -1,11 +1,11 @@
-# CLAUDE.md — 《鱿鱼之泪》项目记忆
+# CLAUDE.md — SquidTears 项目记忆
 
 ## 项目信息
-- 标题：《鱿鱼之泪》（SquidTears）
+- 标题：SquidTears
 - 作者：john
 - 类型：科幻 / 近未来 / 技术惊悚
 - 目标篇幅：12-16万字，16章（4部分×4章），每章7,000-10,000字
-- 正文结局：结局一《鱿鱼之泪》（写实版）；其余三种作为"平行结局"放入附录
+- 正文结局：结局一（写实版）；其余三种作为"平行结局"放入附录
 - 创作方式：Claude Code 协作写作。人主导方向，AI 负责执行、润色与一致性检查。
 
 ## 目录结构
@@ -69,6 +69,6 @@
 正式发布走 GitHub Actions：HTML 部署 GitHub Pages，PDF/EPUB/DOCX 发滚动 release「latest」（见 build.md）。本地仅预览，用 Pandoc 导出到 /tmp：
 ```bash
 FILES=$(ls 01_drafts/*.md | sort -V)
-pandoc $FILES -o /tmp/squid-tears.docx --metadata title="鱿鱼之泪" --metadata author="john" --metadata lang=zh-CN
-pandoc $FILES -o /tmp/squid-tears.epub --toc --metadata title="鱿鱼之泪" --metadata author="john" --metadata lang=zh-CN
+pandoc $FILES -o /tmp/squid-tears.docx --metadata title="SquidTears" --metadata author="john" --metadata lang=zh-CN
+pandoc $FILES -o /tmp/squid-tears.epub --toc --metadata title="SquidTears" --metadata author="john" --metadata lang=zh-CN
 ```

@@ -1,4 +1,4 @@
-name: 导出《鱿鱼之泪》(Release + Pages)
+name: 导出 SquidTears (Release + Pages)
 
 # 导出产物不再提交回仓库：
 #   - HTML 部署到 GitHub Pages（在线阅读，需在 Settings → Pages 把 Source 设为 GitHub Actions）
@@ -67,14 +67,14 @@ jobs:
           pandoc $FILES \
             -s --embed-resources \
             --toc \
-            --metadata title="鱿鱼之泪" \
+            --metadata title="SquidTears" \
             --metadata author="john" \
             --metadata lang=zh-CN \
             -o _exports/squid-tears.html
 
           # DOCX
           pandoc $FILES \
-            --metadata title="鱿鱼之泪" \
+            --metadata title="SquidTears" \
             --metadata author="john" \
             --metadata lang=zh-CN \
             -o _exports/squid-tears.docx
@@ -82,7 +82,7 @@ jobs:
           # EPUB
           pandoc $FILES \
             --toc \
-            --metadata title="鱿鱼之泪" \
+            --metadata title="SquidTears" \
             --metadata author="john" \
             --metadata lang=zh-CN \
             -o _exports/squid-tears.epub
@@ -103,7 +103,7 @@ jobs:
             --pdf-engine=weasyprint \
             --toc \
             --css=/tmp/pdf.css \
-            --metadata title="鱿鱼之泪" \
+            --metadata title="SquidTears" \
             --metadata author="john" \
             --metadata lang=zh-CN \
             -o _exports/squid-tears.pdf
@@ -156,7 +156,7 @@ jobs:
 
           gh release create "$TAG" \
             --target "$SHA_FULL" \
-            --title "鱿鱼之泪" \
+            --title "SquidTears" \
             --notes "$NOTES" \
             _exports/squid-tears.html \
             _exports/squid-tears.docx \

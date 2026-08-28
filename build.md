@@ -19,7 +19,7 @@
 
 ### 方式一：GitHub Actions（推荐，无需本地安装）
 
-push 到 `main`（且改动涉及 `01_drafts/`、`story.md` 或 workflow 本身）后，workflow **「导出《鱿鱼之泪》(Release + Pages)」** 会自动：
+push 到 `main`（且改动涉及 `01_drafts/`、`story.md` 或 workflow 本身）后，workflow **「导出 SquidTears (Release + Pages)」** 会自动：
 
 1. 用 `pandoc/latex` 官方镜像生成 **HTML / DOCX / EPUB / PDF** 四种格式；
 2. **HTML 部署到 GitHub Pages**——在线阅读地址 `https://lightconsen.github.io/squidtears/`；
@@ -44,15 +44,15 @@ FILES=$(ls 01_drafts/*.md | sort -V)
 # HTML（预览）
 pandoc $FILES -o /tmp/squid-tears.html \
   -s --embed-resources --toc \
-  --metadata title="鱿鱼之泪" --metadata author="john" --metadata lang=zh-CN
+  --metadata title="SquidTears" --metadata author="john" --metadata lang=zh-CN
 
 # DOCX
 pandoc $FILES -o /tmp/squid-tears.docx \
-  --metadata title="鱿鱼之泪" --metadata author="john" --metadata lang=zh-CN
+  --metadata title="SquidTears" --metadata author="john" --metadata lang=zh-CN
 
 # EPUB
 pandoc $FILES -o /tmp/squid-tears.epub \
-  --toc --metadata title="鱿鱼之泪" --metadata author="john" --metadata lang=zh-CN
+  --toc --metadata title="SquidTears" --metadata author="john" --metadata lang=zh-CN
 
 # PDF（WeasyPrint：CSS 控制版式，与 CI 一致）
 cat > /tmp/pdf.css <<'CSS'
@@ -62,7 +62,7 @@ pre { white-space: pre-wrap; overflow-wrap: break-word; font-family: "Noto Sans 
 CSS
 pandoc $FILES -o /tmp/squid-tears.pdf \
   --pdf-engine=weasyprint --toc --css=/tmp/pdf.css \
-  --metadata title="鱿鱼之泪" --metadata author="john" --metadata lang=zh-CN
+  --metadata title="SquidTears" --metadata author="john" --metadata lang=zh-CN
 ```
 
 注意：必须用 `sort -V` 让章节按数字顺序排列（01 → 16），否则 `10_`、`11_` 会排在 `09_` 之前。macOS 本地 PDF 需在字体栈补 `PingFang SC` / `Heiti SC`（见上），否则中文会乱码。
