@@ -55,7 +55,7 @@ jobs:
           # 章节文件按数字顺序排列（01 → 16），避免 10_ 排在 09_ 前
           # 容器默认 shell 为 sh（无 bash/mapfile/pipefail），用纯 POSIX 写法
           FILES=""
-          for f in $(ls 01_drafts/part1_seed/*.md | sort -V); do
+          for f in $(ls 01_drafts/*.md | sort -V); do
             FILES="$FILES $f"
           done
           echo "待导出章节："

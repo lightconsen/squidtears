@@ -16,7 +16,7 @@
   - `02_时间线校验.md` — 时间线防穿帮
   - `03_角色弧光追踪.md` — 角色成长轨迹
   - `04_伏笔回收状态.md` — 已埋 / 已收 / 待收
-- `01_drafts/` — 正文草稿（按部分/章节建；ch1 已开写）
+- `01_drafts/` — 正文草稿（16 章直接平铺在此，按章号前缀排序）
 - `03_review/` — 审核记录（三维度审核 + 轮次打磨记录）
 
 ## 核心设定
@@ -67,7 +67,7 @@
 ## 正文导出
 正式发布走 GitHub Actions：HTML 部署 GitHub Pages，PDF/EPUB/DOCX 发滚动 release「latest」（见 build.md）。本地仅预览，用 Pandoc 导出到 /tmp：
 ```bash
-FILES=$(ls 01_drafts/part1_seed/*.md | sort -V)
+FILES=$(ls 01_drafts/*.md | sort -V)
 pandoc $FILES -o /tmp/squid-tears.docx --metadata title="鱿鱼之泪" --metadata author="john" --metadata lang=zh-CN
 pandoc $FILES -o /tmp/squid-tears.epub --toc --metadata title="鱿鱼之泪" --metadata author="john" --metadata lang=zh-CN
 ```

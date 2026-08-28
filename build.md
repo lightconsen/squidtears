@@ -5,7 +5,7 @@
 ## 目录结构
 
 - `story.md` — 完整故事大纲（4 部分 16 章、四种结局、伏笔清单、真实事件索引）。**设定以它为准。**
-- `01_drafts/` — 正文草稿，按部分建目录（当前 16 章草稿在 `part1_seed/`）
+- `01_drafts/` — 正文草稿，16 章直接平铺（按章号前缀排序）
 - `02_tracking/` — 写作台账：章节进度 / 时间线校验 / 角色弧光追踪 / 伏笔回收状态
 - `03_review/` — 审核记录（三维度审核 + 打磨记录）
 - `assets/` — 封面等资源（`cover.jpg`）
@@ -39,7 +39,7 @@ push 到 `main`（且改动涉及 `01_drafts/`、`story.md` 或 workflow 本身�
 需安装 [Pandoc](https://pandoc.org/) 与 [WeasyPrint](https://weasyprint.org/)（PDF 用 WeasyPrint 渲染，自带中文字体断行；macOS 可 `brew install pandoc weasyprint`）。输出到 `/tmp`，不进仓库：
 
 ```bash
-FILES=$(ls 01_drafts/part1_seed/*.md | sort -V)
+FILES=$(ls 01_drafts/*.md | sort -V)
 
 # HTML（预览）
 pandoc $FILES -o /tmp/squid-tears.html \
