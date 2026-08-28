@@ -68,14 +68,14 @@ jobs:
             -s --embed-resources \
             --toc \
             --metadata title="鱿鱼之泪" \
-            --metadata author="john2ai" \
+            --metadata author="1and0" \
             --metadata lang=zh-CN \
             -o _exports/squid-tears.html
 
           # DOCX
           pandoc $FILES \
             --metadata title="鱿鱼之泪" \
-            --metadata author="john2ai" \
+            --metadata author="1and0" \
             --metadata lang=zh-CN \
             -o _exports/squid-tears.docx
 
@@ -83,7 +83,7 @@ jobs:
           pandoc $FILES \
             --toc \
             --metadata title="鱿鱼之泪" \
-            --metadata author="john2ai" \
+            --metadata author="1and0" \
             --metadata lang=zh-CN \
             -o _exports/squid-tears.epub
 
@@ -104,7 +104,7 @@ jobs:
             --toc \
             --css=/tmp/pdf.css \
             --metadata title="鱿鱼之泪" \
-            --metadata author="john2ai" \
+            --metadata author="1and0" \
             --metadata lang=zh-CN \
             -o _exports/squid-tears.pdf
           echo "PDF 大小：$(wc -c < _exports/squid-tears.pdf) bytes"

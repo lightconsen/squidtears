@@ -2,7 +2,7 @@
 
 ## 项目信息
 - 标题：《鱿鱼之泪》（SquidTears）
-- 作者：john2ai
+- 作者：1and0
 - 类型：科幻 / 近未来 / 技术惊悚
 - 目标篇幅：12-16万字，16章（4部分×4章），每章7,000-10,000字
 - 正文结局：结局一《鱿鱼之泪》（写实版）；其余三种作为"平行结局"放入附录
@@ -68,6 +68,6 @@
 正式发布走 GitHub Actions：HTML 部署 GitHub Pages，PDF/EPUB/DOCX 发滚动 release「latest」（见 build.md）。本地仅预览，用 Pandoc 导出到 /tmp：
 ```bash
 FILES=$(ls 01_drafts/part1_seed/*.md | sort -V)
-pandoc $FILES -o /tmp/squid-tears.docx --metadata title="鱿鱼之泪" --metadata author="john2ai" --metadata lang=zh-CN
-pandoc $FILES -o /tmp/squid-tears.epub --toc --metadata title="鱿鱼之泪" --metadata author="john2ai" --metadata lang=zh-CN
+pandoc $FILES -o /tmp/squid-tears.docx --metadata title="鱿鱼之泪" --metadata author="1and0" --metadata lang=zh-CN
+pandoc $FILES -o /tmp/squid-tears.epub --toc --metadata title="鱿鱼之泪" --metadata author="1and0" --metadata lang=zh-CN
 ```
