@@ -9,7 +9,7 @@
 - `02_tracking/` — 写作台账：章节进度 / 时间线校验 / 角色弧光追踪 / 伏笔回收状态
 - `03_review/` — 审核记录（三维度审核 + 打磨记录）
 - `04_exports/` — 导出成品（HTML / DOCX / EPUB / PDF），由 GitHub Actions 自动生成并提交回仓库
-- `assets/` — 封面等资源（`cover.png`）
+- `assets/` — 封面等资源（`cover.jpg`）
 - `.github/workflows/export.yml` — 自动导出 workflow
 - `CLAUDE.md` — 项目写作约定（给协作 AI 的记忆）
 - `LICENSE` — 版权许可（中文为权威版本）
