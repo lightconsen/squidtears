@@ -13,7 +13,7 @@ jobs:
   export:
     name: 生成四种格式并提交回仓库
     runs-on: ubuntu-latest
-    container: pandoc/latex:latest
+    container: pandoc/latex:latest-debian
     steps:
       - name: 检出仓库
         uses: actions/checkout@v4
