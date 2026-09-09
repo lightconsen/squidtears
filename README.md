@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.svg" alt="SquidTears Logo" width="160">
+</p>
+
 # SquidTears
 
 <p align="center">
