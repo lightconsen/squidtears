@@ -2,7 +2,7 @@
 
 ## 项目信息
 - 标题：SquidTears
-- 作者：john
+- 作者：智人之后
 - 类型：科幻 / 近未来 / 技术惊悚
 - 目标篇幅：12-16万字，16章（4部分×4章），每章7,000-10,000字
 - 正文结局：结局一（写实版）；其余三种作为"平行结局"放入附录
@@ -71,6 +71,6 @@
 正式产物走 GitHub Actions：HTML/PDF/EPUB/DOCX 发滚动 release「latest」（见 build.md）。**不部署 GitHub Pages**——作品走独家签约变现路线，不设任何公开在线阅读入口。本地仅预览，用 Pandoc 导出到 /tmp：
 ```bash
 FILES=$(ls 01_drafts/*.md | sort -V)
-pandoc $FILES -o /tmp/squid-tears.docx --metadata title="我需要光（SquidTears）" --metadata author="john" --metadata lang=zh-CN
-pandoc $FILES -o /tmp/squid-tears.epub --toc --metadata title="我需要光（SquidTears）" --metadata author="john" --metadata lang=zh-CN
+pandoc $FILES -o /tmp/squid-tears.docx --metadata title="我需要光（SquidTears）" --metadata author="智人之后" --metadata lang=zh-CN
+pandoc $FILES -o /tmp/squid-tears.epub --toc --metadata title="我需要光（SquidTears）" --metadata author="智人之后" --metadata lang=zh-CN
 ```

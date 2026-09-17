@@ -67,14 +67,14 @@ jobs:
             -s --embed-resources \
             --toc \
             --metadata title="我需要光（SquidTears）" \
-            --metadata author="john" \
+            --metadata author="智人之后" \
             --metadata lang=zh-CN \
             -o _exports/squid-tears.html
 
           # DOCX
           pandoc $FILES \
             --metadata title="我需要光（SquidTears）" \
-            --metadata author="john" \
+            --metadata author="智人之后" \
             --metadata lang=zh-CN \
             -o _exports/squid-tears.docx
 
@@ -82,7 +82,7 @@ jobs:
           pandoc $FILES \
             --toc \
             --metadata title="我需要光（SquidTears）" \
-            --metadata author="john" \
+            --metadata author="智人之后" \
             --metadata lang=zh-CN \
             -o _exports/squid-tears.epub
 
@@ -103,7 +103,7 @@ jobs:
             --toc \
             --css=/tmp/pdf.css \
             --metadata title="我需要光（SquidTears）" \
-            --metadata author="john" \
+            --metadata author="智人之后" \
             --metadata lang=zh-CN \
             -o _exports/squid-tears.pdf
           echo "PDF 大小：$(wc -c < _exports/squid-tears.pdf) bytes"
