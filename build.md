@@ -30,7 +30,7 @@ push 到 `main`（且改动涉及 `01_drafts/`、`story.md` 或 workflow 本身�
 
 - 产物：`squid-tears.html` / `squid-tears.docx` / `squid-tears.epub` / `squid-tears.pdf`
 - 下载链接（永远指向最新，仅仓库成员可访问）：`https://github.com/lightconsen/squidtears/releases/latest/download/<文件>`
-- 导出元数据标题：`我需要光（SquidTears）`
+- 导出元数据标题：`鱿鱼之光（SquidTears）`
 - PDF 用 **WeasyPrint** 渲染（`--pdf-engine=weasyprint`）：Pango 原生中文断行 + `pre-wrap` 代码换行，杜绝 CJK 右侧截断；CSS 控制版式（A4、边距 2.2cm、正文 11pt / 行距 1.75 / 两端对齐）
 - HTML 为自包含单文件（CSS 内嵌、带目录），供个人阅读与归档
 
@@ -44,15 +44,15 @@ FILES=$(ls 01_drafts/*.md | sort -V)
 # HTML（预览）
 pandoc $FILES -o /tmp/squid-tears.html \
   -s --embed-resources --toc \
-  --metadata title="我需要光（SquidTears）" --metadata author="智人之后" --metadata lang=zh-CN
+  --metadata title="鱿鱼之光（SquidTears）" --metadata author="智人之后" --metadata lang=zh-CN
 
 # DOCX
 pandoc $FILES -o /tmp/squid-tears.docx \
-  --metadata title="我需要光（SquidTears）" --metadata author="智人之后" --metadata lang=zh-CN
+  --metadata title="鱿鱼之光（SquidTears）" --metadata author="智人之后" --metadata lang=zh-CN
 
 # EPUB
 pandoc $FILES -o /tmp/squid-tears.epub \
-  --toc --metadata title="我需要光（SquidTears）" --metadata author="智人之后" --metadata lang=zh-CN
+  --toc --metadata title="鱿鱼之光（SquidTears）" --metadata author="智人之后" --metadata lang=zh-CN
 
 # PDF（WeasyPrint：CSS 控制版式，与 CI 一致）
 cat > /tmp/pdf.css <<'CSS'
@@ -62,7 +62,7 @@ pre { white-space: pre-wrap; overflow-wrap: break-word; font-family: "Noto Sans 
 CSS
 pandoc $FILES -o /tmp/squid-tears.pdf \
   --pdf-engine=weasyprint --toc --css=/tmp/pdf.css \
-  --metadata title="我需要光（SquidTears）" --metadata author="智人之后" --metadata lang=zh-CN
+  --metadata title="鱿鱼之光（SquidTears）" --metadata author="智人之后" --metadata lang=zh-CN
 ```
 
 注意：必须用 `sort -V` 让章节按数字顺序排列（01 → 16），否则 `10_`、`11_` 会排在 `09_` 之前。macOS 本地 PDF 需在字体栈补 `PingFang SC` / `Heiti SC`（见上），否则中文会乱码。
