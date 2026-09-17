@@ -68,9 +68,9 @@
 - 每章引用真实事件后，可在对应章节目录顺手补记到 story.md 附录，保证索引不落后。
 
 ## 正文导出
-正式发布走 GitHub Actions：HTML 部署 GitHub Pages，PDF/EPUB/DOCX 发滚动 release「latest」（见 build.md）。本地仅预览，用 Pandoc 导出到 /tmp：
+正式产物走 GitHub Actions：HTML/PDF/EPUB/DOCX 发滚动 release「latest」（见 build.md）。**不部署 GitHub Pages**——作品走独家签约变现路线，不设任何公开在线阅读入口。本地仅预览，用 Pandoc 导出到 /tmp：
 ```bash
 FILES=$(ls 01_drafts/*.md | sort -V)
-pandoc $FILES -o /tmp/squid-tears.docx --metadata title="SquidTears" --metadata author="john" --metadata lang=zh-CN
-pandoc $FILES -o /tmp/squid-tears.epub --toc --metadata title="SquidTears" --metadata author="john" --metadata lang=zh-CN
+pandoc $FILES -o /tmp/squid-tears.docx --metadata title="我需要光（SquidTears）" --metadata author="john" --metadata lang=zh-CN
+pandoc $FILES -o /tmp/squid-tears.epub --toc --metadata title="我需要光（SquidTears）" --metadata author="john" --metadata lang=zh-CN
 ```
