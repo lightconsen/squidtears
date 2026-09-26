@@ -1,11 +1,12 @@
-name: 导出 SquidTears (Release)
+name: 导出 SquidTears (Release + Pages)
 
 # 导出产物不提交回仓库：
-#   - HTML / DOCX / EPUB / PDF 上传到滚动 release「latest」
-#     （私有仓库，仅协作者可见；每次 push 重建同一个 latest，不累积历史版本）
+#   - HTML 部署到 GitHub Pages（在线阅读，需在 Settings → Pages 把 Source 设为 GitHub Actions）
+#   - PDF / EPUB / DOCX / HTML 上传到滚动 release「latest」
+# 下载链接（永远指向最新草稿）：
+#   https://github.com/lightconsen/squidtears/releases/latest/download/squid-tears.pdf 等
 #
-# 本 workflow **不部署 GitHub Pages**：作品走独家签约路线，不应存在任何
-# 自动公开的在线阅读入口。若将来需要恢复公开阅读，先确认签约合同允许。
+# 2026-09-26 路线回摆：作品回到 GitHub 开源路线，Pages 在线阅读恢复部署。
 
 on:
   workflow_dispatch:
@@ -18,9 +19,11 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
-  group: "export"
+  group: "pages"
   cancel-in-progress: true
 
 jobs:
@@ -62,7 +65,7 @@ jobs:
 
           mkdir -p _exports
 
-          # HTML（自包含单文件 + 目录，个人阅读用）
+          # HTML（自包含单文件 + 目录，用于在线阅读）
           pandoc $FILES \
             -s --embed-resources \
             --toc \
@@ -108,11 +111,20 @@ jobs:
             -o _exports/squid-tears.pdf
           echo "PDF 大小：$(wc -c < _exports/squid-tears.pdf) bytes"
 
+          # Pages 在线阅读用：根路径直接 serve index.html
+          mkdir -p _pages
+          cp _exports/squid-tears.html _pages/index.html
+
       - name: 上传四种格式（供 Release 使用）
         uses: actions/upload-artifact@v5
         with:
           name: squid-tears-exports
           path: _exports/
+
+      - name: 上传 HTML（供 Pages 部署）
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _pages/
 
   release:
     name: 更新滚动 Release（latest）
@@ -142,7 +154,7 @@ jobs:
             gh release delete "$TAG" --yes --cleanup-tag
           fi
 
-          NOTES=$(printf '自动构建于 %s（commit %s）。\n\n《鱿鱼之光》（SquidTears）最新草稿导出：HTML / DOCX / EPUB / PDF 见本 release 附件。\n本仓库为私有创作工作区，产物仅供作者与协作者使用。' "$DATE" "$SHA")
+          NOTES=$(printf '自动构建于 %s（commit %s）。\n\n《鱿鱼之光》（SquidTears）最新草稿导出：HTML / DOCX / EPUB / PDF 见本 release 附件。\n在线阅读（HTML）：https://lightconsen.github.io/squidtears/' "$DATE" "$SHA")
 
           gh release create "$TAG" \
             --target "$SHA_FULL" \
@@ -152,3 +164,15 @@ jobs:
             _exports/squid-tears.docx \
             _exports/squid-tears.epub \
             _exports/squid-tears.pdf
+
+  deploy:
+    name: 部署 GitHub Pages
+    needs: export
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 部署到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
