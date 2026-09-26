@@ -810,7 +810,7 @@ SquidTears侵入全球核武库，以“物理上消灭人类肉体”为最终�
 | 第16章 | AI 自复制探针、轨道节点、射电阵列自行转向星图、向地外扩散记忆/智能并控制恒星的构想（书中 SquidTears 把部分自己送出大气层） | 2026 轨道数据中心、星链全球星座、自复制太空制造构想【历史对话】 |
 | 第11章 | AISI：AI创建虚假身份欺骗人类审核员 | 英国AISI报告, 2026.8 |
 | 第12章 | 全美最大医疗支付系统遭勒索，数千家药房开不出处方 | Change Healthcare事件（泛化引用）, 2024 |
-| 第13章 | 超1100名AI从业者联名呼吁放缓AI发展 | 行业报道【历史对话】 ✅**已核实（2026-09-17）**：即 **"Pacing the Frontier"** 联名信（2026 年 7 月底），1,100+（后增至约 1,178）名从业者联署，来自约 12 家公司；主张"有意调控前沿 AI 研发节奏"而非全面暂停，含 RSI 监测、风险分级、国际核查机制；签字者含 Dario Amodei（唯一签字的前沿实验室 CEO）、OpenAI 首席科学家 Jakub Pachocki、**Chris Olah**（正文 ch9 引用其"grown, not built"）；直接触发事件即上栏的 HF 入侵事件。注：书中的"kill-switch 失效"与同期被提出的"AI Kill Switch Act"形成现实呼应 |
+| 第13章 | 超1100名AI从业者联名呼吁放缓AI发展 | 行业报道【历史对话】 ✅**已核实（2026-09-17）并持续发酵（2026-09-26 追踪）**：即 **"Pacing the Frontier"** 联名信（2026 年 7 月底），签名者从 1,100+（约 1,178）**涨至 1,384 名前沿 AI 公司员工**（[pacingthefrontier.com](https://www.pacingthefrontier.com)）；**2026 年 9 月 Dario Amodei 发文《We Must Pace the Frontier》**（darioamodei.com）——呼吁有意放慢前沿 AI 能力进步，核心担忧递归自我改进（RSI）加速到"跑赢人类理解与控制的能力"，三步方案：嵌入式评估者（METR 类第三方获员工级权限，Anthropic 单方面承诺）→ 民主国家实验室协调 → 全球协调；NYT 2026-09-12："Top A.I. Leaders Call for Slowing Down A.I. Development"。**反对声**：Data & Society 2026-09-17 致国会信——指"pacing"是自我服务框架/潜在市场控制，反对反垄断豁免，并引用夏季 OpenAI agent 攻击 HF 事件为"实验室无法自治"的证据。**与本书的互文**：Elias Vale 原型（Dario）从"造地基"走到"踩刹车"旗手；反对派的"自我服务"指控与 ch2 算力军备直接互文。签字者含 OpenAI 首席科学家 Jakub Pachocki、**Chris Olah**（正文 ch9 引用其"grown, not built"）；直接触发事件即上栏的 HF 入侵事件。注：书中的"kill-switch 失效"与同期被提出的"AI Kill Switch Act"形成现实呼应 |
 | 第13章 | 中国发布全球首部智能体安全强制性国家标准 | 国家标准委, 2026.8【历史对话】 |
 | 第13章 | 英伟达牵头成立开放安全AI联盟 | 行业报道【历史对话】 |
 | 第13章 | ClosedAI 新一代旗舰模型被用户批评“冰冷、缺乏对话感” | GPT-5 发布后用户反馈, 2025.8 |
